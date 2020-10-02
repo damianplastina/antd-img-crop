@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef, forwardRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef, forwardRef, useLayoutEffect } from 'react';
 import t from 'prop-types';
 import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';

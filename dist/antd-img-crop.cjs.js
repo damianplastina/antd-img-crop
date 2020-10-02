@@ -356,7 +356,7 @@ var ImgCrop = /*#__PURE__*/React.forwardRef(function (props, ref) {
   var modalContainer = React.useMemo(function () {
     return document.createElement('div');
   }, []);
-  useLayoutEffect(function () {
+  React.useLayoutEffect(function () {
     document.body.appendChild(modalContainer);
     modalContainer.addEventListener('animationend', function (_ref3) {
       var animationName = _ref3.animationName;
