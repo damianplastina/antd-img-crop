@@ -172,18 +172,6 @@ var ImgCrop = /*#__PURE__*/React.forwardRef(function (props, ref) {
             var reader = new FileReader();
             reader.addEventListener('load', function () {
               setSrc(reader.result);
-              /*
-              *  fix redraw bug for Safari where the
-              *  crop size could be wrong caused possibly
-              *  by the modal animation
-              */
-
-              var stop = Date.now() + 600;
-              var animInt = setInterval(function () {
-                setRotateVal(0.1);
-                setRotateVal(0);
-                if (Date.now() - stop >= 0) clearInterval(animInt);
-              }, 30);
             });
             reader.readAsDataURL(file);
           });
@@ -363,10 +351,30 @@ var ImgCrop = /*#__PURE__*/React.forwardRef(function (props, ref) {
         }
       }
     }, _callee2);
-  })), [hasRotate, onClose, rotateVal]);
+  })), [hasRotate, onClose, rotateVal]); //  Have a custom modal container
+
+  var modalContainer = React.useMemo(function () {
+    return document.createElement('div');
+  }, []);
+  useLayoutEffect(function () {
+    document.body.appendChild(modalContainer);
+    modalContainer.addEventListener('animationend', function (_ref3) {
+      var animationName = _ref3.animationName;
+
+      if (animationName === 'antZoomIn') {
+        //  Reset the frame
+        setRotateVal(0.1);
+        setRotateVal(0);
+      }
+    });
+    return function () {
+      return modalContainer.remove();
+    }; //  Don't know if I need to remove first the listener since I destroy the element
+  }, []);
 
   var renderComponent = function renderComponent(titleOfModal) {
     return /*#__PURE__*/React__default['default'].createElement(React__default['default'].Fragment, null, renderUpload(), src && /*#__PURE__*/React__default['default'].createElement(Modal__default['default'], Object.assign({
+      getContainer: modalContainer,
       visible: true,
       wrapClassName: pkg + "-modal",
       title: titleOfModal,
